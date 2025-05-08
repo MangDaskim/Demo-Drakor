@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Streaming dan download drama Korea terbaru dan ongoing dengan subtitle Indonesia hanya di Oppadrakor. Gratis dan update setiap hari!" />
+  <meta name="keywords" content="drama Korea, nonton drama Korea, oppadrakor, subtitle Indonesia, streaming drakor, drama ongoing" />
+  <meta name="author" content="Oppadrakor" />
+  <title>Oppadrakor - Drama Korea Ongoing</title>
+
+  <!-- Meta Tag Open Graph (OG) untuk Facebook -->
+  <meta property="og:title" content="Oppadrakor - Streaming Dan Download Drama Korea" />
+  <meta property="og:description" content="Streaming dan download drama Korea terbaru dan ongoing dengan subtitle Indonesia hanya di Oppadrakor. Gratis dan update setiap hari!" />
+  <meta property="og:image" content="https://oppadrakor.netlify.app/img/banner_oppadrakor.png" />  <!-- Ganti dengan gambar yang sesuai -->
+  <meta property="og:url" content="https://oppadrakor.netlify.app" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="id_ID" />
+
+  <!-- Meta Tag Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Oppadrakor - Streaming Dan Download Drama Korea" />
+  <meta name="twitter:description" content="Streaming dan download drama Korea terbaru dan ongoing dengan subtitle Indonesia hanya di Oppadrakor. Gratis dan update setiap hari!" />
+  <meta name="twitter:image" content="https://oppadrakor.netlify.app/img/banner_oppadrakor.png" /> <!-- Ganti dengan gambar yang sesuai -->
+  <meta name="twitter:url" content="https://oppadrakor.netlify.app" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+</head>
+
+<body class="bg-gray-100 font-sans pb-20">
+
+
+<!-- Header -->
+<header class="fixed top-0 w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white z-50 shadow">
+  <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Oppadrakor</h1>
+    <div class="flex items-center gap-3 bg-gray-100 px-4 py-2 rounded-full shadow-lg">
+      <!-- WhatsApp Icon from Icons8 -->
+      <a href="https://whatsapp.com/channel/0029VbADpfZJkK753CfIVg1t" target="_blank">
+        <img src="https://img.icons8.com/ios-filled/24/25D366/whatsapp--v1.png" alt="WhatsApp" class="w-5 h-5" />
+      </a>
+  
+      <!-- Telegram Icon from Icons8 -->
+      <a href="https://t.me/Oppadrakor_id" target="_blank">
+        <img src="https://img.icons8.com/ios-filled/24/0088cc/telegram-app.png" alt="Telegram" class="w-5 h-5" />
+      </a>
+  
+      <!-- Text -->
+      <span class="text-sm font-medium text-gray-700">Join With Us</span>
+    </div>
+  </div>  
+
+
+<div class="bg-blue-800 text-white py-2 px-4 flex items-center gap-2 overflow-hidden">
+  <!-- Ikon Megaphone -->
+  <i data-lucide="megaphone" class="w-5 h-5 shrink-0"></i>
+
+  <!-- Teks Berjalan -->
+  <marquee behavior="scroll" direction="left" scrollamount="5" class="text-sm" id="marquee-text">
+    Memuat info terbaru...
+  </marquee>
+</div>
+</header>
+
+<!-- Spacer karena header fixed -->
+<div class="pt-[116px]"></div>
+
+<!-- Donasi Saweria (Random dari Sheet) -->
+<div id="donasi-box" class="bg-white shadow-md py-3 px-4 text-center text-black mb-4 mx-4 rounded-xl hidden">
+  <p id="donasi-teks" class="font-medium mb-2"></p>
+  <a href="https://saweria.co/oppadrakor" target="_blank" class="inline-flex items-center bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-4 py-2 rounded-full transition">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3 1.343 3 3s-1.343 3-3 3m0 0c-1.657 0-3-1.343-3-3s1.343-3 3-3m0 0V5m0 11v3" />
+    </svg>
+    Donasi Sekarang!
+  </a>
+</div>
+
+
+  <main class="pt-5 container mx-auto px-4 py-8">
+    <!-- Iklan Atas -->
+    <div class="bg-yellow-300 text-center p-4 mb-6 rounded shadow">Iklan Banner Dummy (Atas)</div>
+
+    <!-- Popup Loading Spinner -->
+<div id="loading-popup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[9999] hidden transition-opacity duration-300">
+  <div class="w-20 h-20 border-4 border-t-blue-500 border-b-pink-500 border-l-transparent border-r-transparent rounded-full animate-spin"></div>
+</div>
+    <div id="drama-list" class="space-y-6"></div>
+
+    <!-- Iklan Tengah -->
+    <div id="middle-ad" class="bg-blue-300 text-center p-4 mb-6 rounded shadow">Iklan Tengah Dummy</div>
+  </main>
+  
+<!-- Floating Bottom Menu -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t shadow-md flex justify-around items-center py-2 z-50">
+  <a href="/" id="menu-home" class="menu-link flex flex-col items-center text-gray-600 hover:text-blue-600 transition-colors text-xs font-medium">
+    <i data-lucide="tv" class="w-6 h-6 mb-1"></i>
+    <span>Ongoing</span>
+  </a>
+  <a href="/complete" id="menu-complete" class="menu-link flex flex-col items-center text-gray-600 hover:text-blue-600 transition-colors text-xs font-medium">
+    <i data-lucide="check-circle" class="w-6 h-6 mb-1"></i>
+    <span>Complete</span>
+  </a>
+  <a href="/jadwal" id="menu-jadwal" class="menu-link flex flex-col items-center text-gray-600 hover:text-blue-600 transition-colors text-xs font-medium">
+    <i data-lucide="calendar-days" class="w-6 h-6 mb-1"></i>
+    <span>Jadwal</span>
+  </a>
+  <a href="/upcoming" id="menu-upcoming" class="menu-link flex flex-col items-center text-gray-600 hover:text-blue-600 transition-colors text-xs font-medium">
+    <i data-lucide="clock" class="w-6 h-6 mb-1"></i>
+    <span>Upcoming</span>
+  </a>
+</nav>
+
+
+<style>
+  /* Tombol aktif dengan background mendem tapi tidak terlalu penuh */
+  .active-link {
+    background-color: #e0f2fe; /* Warna biru muda */
+    border-radius: 10px;
+    padding: 10px 15px; /* Memberi ruang di sekitarnya */
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1); /* Efek mendem lebih halus */
+    transform: scale(0.98); /* Tampilan seperti ditekan */
+    transition: all 0.3s ease;
+  }
+
+  /* Efek hover untuk semua menu */
+  .menu-link:hover {
+    color: #1e40af; /* Warna biru saat hover */
+  }
+</style>
+
+
+
+<style>
+  /* Glow Effect yang lebih soft */
+  .glow-effect {
+    position: relative;
+    color: #1e40af; /* Warna biru halus */
+    animation: glow-animation 1s ease-out infinite alternate;
+  }
+
+  @keyframes glow-animation {
+    0% {
+      text-shadow: 0 0 3px rgba(30, 64, 175, 0.5), 0 0 5px rgba(30, 64, 175, 0.4), 0 0 8px rgba(30, 64, 175, 0.3);
+    }
+    100% {
+      text-shadow: 0 0 6px rgba(30, 64, 175, 0.7), 0 0 10px rgba(30, 64, 175, 0.6), 0 0 15px rgba(30, 64, 175, 0.5);
+    }
+  }
+
+  /* Untuk responsif hover */
+  .menu-link:hover {
+    color: #1e40af;
+  }
+</style>
+
+<script>
+  // Fungsi aktifkan menu sesuai URL
+  document.addEventListener("DOMContentLoaded", function () {
+    const path = window.location.pathname;
+    const menus = {
+      "/": "menu-home",
+      "/complete": "menu-complete",
+      "/jadwal": "menu-jadwal",
+      "/upcoming": "menu-upcoming"
+    };
+
+    const activeMenu = menus[path];
+    if (activeMenu) {
+      const activeLink = document.getElementById(activeMenu);
+      activeLink.classList.add("active-link"); // Tambahkan kelas untuk tombol aktif
+    }
+  });
+</script>
+
+<script>
+  const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmujaZtm-jmf6HLbDSG9fFCALrzPW6pPPYTNH7tKqCRp_0VR3ueTDo1nT0Ukv8zYf3mHOmMILJemNV/pub?output=csv';
+
+  async function loadDonasiText() {
+    try {
+      const res = await fetch(sheetUrl);
+      const csv = await res.text();
+      const rows = csv.trim().split('\n'); // Split per baris
+
+      // Pilih salah satu baris secara acak
+      if (rows.length > 0) {
+        const randomRow = rows[Math.floor(Math.random() * rows.length)];
+        document.getElementById('donasi-teks').textContent = randomRow;
+        document.getElementById('donasi-box').classList.remove('hidden');
+      }
+    } catch (err) {
+      console.error('Gagal memuat teks donasi:', err);
+    }
+  }
+
+  loadDonasiText();
+</script>
+
+<script>
+  const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSs3X_HyDrdsBv4cnzL_JgSZYMGsgGSLYcev96X1g7X3R0LgnrhH7yTvdDfOc_0G8AFZG1S_Mp0zaJ5/pub?output=csv';
+
+  async function getDramaData() {
+    const loadingPopup = document.getElementById('loading-popup');
+    const container = document.getElementById('drama-list');
+    loadingPopup.style.display = 'flex'; 
+    container.innerHTML = '';
+
+    try {
+      const res = await fetch(sheetURL);
+      const text = await res.text();
+      const rows = text.trim().split('\n');
+
+      const headers = rows[0].split(',').map(h => h.trim().toLowerCase());
+      const dataRows = rows.slice(1);
+
+      let dramas = [];
+
+      dataRows.forEach((row) => {
+        const cols = [];
+        let current = '';
+        let insideQuote = false;
+
+        for (let i = 0; i < row.length; i++) {
+          const char = row[i];
+          if (char === '"') {
+            insideQuote = !insideQuote;
+          } else if (char === ',' && !insideQuote) {
+            cols.push(current);
+            current = '';
+          } else {
+            current += char;
+          }
+        }
+        cols.push(current);
+
+        const drama = {};
+        headers.forEach((header, idx) => {
+          drama[header] = cols[idx] ? cols[idx].trim().replace(/^"|"$/g, '') : '';
+        });
+
+        if (drama.episode?.toLowerCase().includes('end')) {
+          return;
+        }
+
+        dramas.push(drama);
+      });
+
+      let count = 0;
+
+      dramas.forEach((drama) => {
+        const dramaHTML = `
+          <a href="/drama/${drama.slug}" class="flex bg-white rounded-lg shadow-md overflow-hidden hover:bg-gray-50 transition relative">
+            <img src="${drama.gambar}" alt="${drama.judul}" class="w-32 md:w-40 h-auto object-cover">
+            <div class="p-4 flex flex-col justify-between flex-1">
+              <div>
+                <h2 class="text-xl font-semibold">${drama.judul}</h2>
+                <p class="text-sm text-gray-600 mb-1">Genre: ${drama.genre}</p>
+                <p class="text-sm text-gray-600 mb-1">Episode: ${drama.episode}</p>
+                ${drama.jadwal ? `<p class="text-sm text-gray-600 mb-1">Jadwal: ${drama.jadwal}</p>` : ''}
+              </div>
+            </div>
+          </a>
+        `;
+
+        container.innerHTML += dramaHTML;
+        count++;
+
+        if (count === 4) {
+          container.innerHTML += `
+            <div class="bg-blue-300 text-center p-4 my-6 rounded shadow">Iklan Tengah Dummy (Setelah item ke-4)</div>
+          `;
+        }
+      });
+
+    } catch (error) {
+      container.innerHTML = `<div class="text-center text-red-500">Gagal memuat data drama. Coba lagi nanti.</div>`;
+    } finally {
+      loadingPopup.style.display = 'none'; 
+    }
+  }
+
+  getDramaData();
+  lucide.createIcons();
+</script>
+
+
+<script>
+  const marqueeSheet = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSs3X_HyDrdsBv4cnzL_JgSZYMGsgGSLYcev96X1g7X3R0LgnrhH7yTvdDfOc_0G8AFZG1S_Mp0zaJ5/pub?output=csv';
+  const infoDonasiSheet = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmujaZtm-jmf6HLbDSG9fFCALrzPW6pPPYTNH7tKqCRp_0VR3ueTDo1nT0Ukv8zYf3mHOmMILJemNV/pub?gid=0&single=true&output=csv';
+  const infoSendiriSheet = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmujaZtm-jmf6HLbDSG9fFCALrzPW6pPPYTNH7tKqCRp_0VR3ueTDo1nT0Ukv8zYf3mHOmMILJemNV/pub?gid=1921525187&single=true&output=csv';
+
+  function pecahHari(jadwal) {
+    const hariList = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+    let hasil = [];
+    const bagian = jadwal.split(',');
+    bagian.forEach(segment => {
+      segment = segment.trim();
+      if (segment.includes('-')) {
+        const [start, end] = segment.split('-').map(s => s.trim());
+        const idxAwal = hariList.indexOf(start);
+        const idxAkhir = hariList.indexOf(end);
+        if (idxAwal !== -1 && idxAkhir !== -1 && idxAwal <= idxAkhir) {
+          hasil.push(...hariList.slice(idxAwal, idxAkhir + 1));
+        }
+      } else if (hariList.includes(segment)) {
+        hasil.push(segment);
+      }
+    });
+    return hasil;
+  }
+
+  function acakSatu(array) {
+    const filtered = array.filter(Boolean);
+    return filtered[Math.floor(Math.random() * filtered.length)];
+  }
+
+  function simpanEpisode(judul, episode) {
+    const key = `eps_${judul}`;
+    const data = {
+      episode: episode,
+      timestamp: new Date().toISOString()
+    };
+    localStorage.setItem(key, JSON.stringify(data));
+  }
+
+  function ambilEpisodeSebelumnya(judul) {
+    const key = `eps_${judul}`;
+    const stored = localStorage.getItem(key);
+    if (!stored) return null;
+    try {
+      return JSON.parse(stored);
+    } catch {
+      return null;
+    }
+  }
+
+  function ambilNomorEpisode(str) {
+    const cocok = str?.match(/\d+/);
+    return cocok ? parseInt(cocok[0]) : null;
+  }
+
+  async function loadMarquee() {
+    try {
+      const [res1, res2, res3] = await Promise.all([
+        fetch(marqueeSheet),
+        fetch(infoDonasiSheet),
+        fetch(infoSendiriSheet)
+      ]);
+
+      const [csv1, csv2, csv3] = await Promise.all([
+        res1.text(),
+        res2.text(),
+        res3.text()
+      ]);
+
+      const dataDrama = Papa.parse(csv1, { header: true }).data;
+      const semuaDonasi = Papa.parse(csv2, { header: false }).data.map(row => row[0]?.trim()).filter(Boolean);
+      const semuaSendiri = Papa.parse(csv3, { header: false }).data.map(row => row[0]?.trim()).filter(Boolean);
+
+      const donasiRandom = acakSatu(semuaDonasi);
+      const hariIni = new Date().toLocaleDateString('id-ID', { weekday: 'long' });
+
+      const sekarang = new Date();
+      const infoDramaHariIni = [];
+
+      dataDrama.forEach(row => {
+        const judul = row.Judul?.trim();
+        const epsSekarang = row.Episode?.trim();
+        const jadwal = row.Jadwal?.trim();
+
+        if (!judul || !epsSekarang || !jadwal) return;
+
+        const hariTayang = pecahHari(jadwal);
+        if (!hariTayang.includes(hariIni)) return;
+
+        const nomorSekarang = ambilNomorEpisode(epsSekarang);
+        if (!nomorSekarang) return;
+
+        const dataLokal = ambilEpisodeSebelumnya(judul);
+        const nomorSebelumnya = ambilNomorEpisode(dataLokal?.episode);
+        const waktuSimpan = dataLokal?.timestamp ? new Date(dataLokal.timestamp) : null;
+        const bedaHari = waktuSimpan && (waktuSimpan.toDateString() !== sekarang.toDateString());
+
+        if (nomorSebelumnya && nomorSekarang > nomorSebelumnya) {
+          // Episode bertambah: tampilkan info episode terbaru
+          simpanEpisode(judul, epsSekarang);
+          infoDramaHariIni.push(`Episode Terbaru ${judul} Episode ${epsSekarang} Telah Tersedia, Silakan di Tonton Yaa.`);
+        } else if (nomorSekarang === nomorSebelumnya && waktuSimpan && !bedaHari) {
+          // Episode sudah ditandai sebagai terbaru hari ini
+          infoDramaHariIni.push(`Episode Terbaru ${judul} Episode ${epsSekarang} Telah Tersedia, Silakan di Tonton Yaa.`);
+        } else {
+          // Belum ada update, tampilkan info akan tayang
+          simpanEpisode(judul, epsSekarang);
+          infoDramaHariIni.push(`${judul} Episode ${nomorSekarang + 1} Akan Tayang Hari Ini, Jangan Lupa Nonton Yaa.`);
+        }
+      });
+
+      const semuaInfo = [];
+      const maxLen = Math.max(infoDramaHariIni.length, semuaSendiri.length);
+      for (let i = 0; i < maxLen; i++) {
+        if (infoDramaHariIni[i]) semuaInfo.push(infoDramaHariIni[i]);
+        if (i === 0 && donasiRandom) semuaInfo.push(donasiRandom);
+        if (semuaSendiri[i]) semuaInfo.push(semuaSendiri[i]);
+      }
+
+      const separator = '<span class="mx-3 text-blue-300 font-bold">|</span>';
+      document.getElementById('marquee-text').innerHTML = semuaInfo.map(t => `<span>${t}</span>`).join(separator);
+    } catch (err) {
+      console.error(err);
+      document.getElementById('marquee-text').textContent = 'Gagal memuat info.';
+    }
+  }
+
+  loadMarquee();
+  lucide.createIcons();
+</script>
+  
+
+</body>
+</html>
